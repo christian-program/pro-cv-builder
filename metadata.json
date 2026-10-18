@@ -1,0 +1,6 @@
+{
+  "name": "CV Builder",
+  "description": "Générateur de CV professionnel, multilingue et responsive. Créez, personnalisez et exportez votre CV en PDF en quelques clics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

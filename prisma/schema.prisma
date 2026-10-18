@@ -1,0 +1,45 @@
+// Prisma Schema for CV Builder
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(uuid())
+  email                 String    @unique
+  password              String
+  name                  String
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  resetToken            String?
+  resetTokenExpiry      DateTime?
+  aiSuggestionsUsedToday Int      @default(0)
+  lastAiResetDate       DateTime  @default(now())
+
+  cvs                   CV[]
+
+  @@map("users")
+}
+
+model CV {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String   @default("Mon CV")
+  templateId  String   @default("modern")
+  status      String   @default("draft") // "draft" | "completed"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  data        Json     // Structured CV JSON (personal, summary, experiences, education, skills, languages, projects, certifications, interests)
+  config      Json     // UI Configuration JSON (templateId, primaryColor, fontStyle, density, showPhoto, photoShape, sectionOrder)
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("cvs")
+}
